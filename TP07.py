@@ -27,7 +27,7 @@ et maintenance du logiciel. On repère facilement les violations des contrats pe
 ou l'éxécution, on peut donc les corriger avec aisance
 """
 
-#Synthèse du cours
+#Cours
 
 """
 fait la distintion entre l'interface publique d'un code (utilisée par le développeur utilisateur) et
