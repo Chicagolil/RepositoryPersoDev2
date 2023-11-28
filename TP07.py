@@ -1,6 +1,4 @@
 # TP07 : PROGRAMMATION PAR CONTRAT, PROGRAMATION DÉFENSIVE ET EXCEPTIONS
-# ça à l'air biiiiiien chiantos ce truc là
-# gnegnegne contrat
 # 1. PROGRAMMATION PAR CONTRAT
 # rappel de quesque c quoi ce que c :
 
@@ -68,9 +66,9 @@ def add_numbers(a: int, b: int) -> int:
     """Cette fonction additionne deux nombres entiers."""
     return a + b
 
-# QUE LE TP COMMENCE !!!!! va y avoir bcp de blabla à mon avis , bon moi je vais dodo, il est déjà 4h du zbar
+# QUE LE TP COMMENCE !!!!! bon moi je vais dodo, il est déjà 4h du zbar
 
-# comment la prof le fait
+# TP
 def factorielle(n: int)  -> int :
     """calcule la factorielle de n
     PRE : n est un entier positif
@@ -117,7 +115,7 @@ def factorielle(n: int)  -> int :
 
 print(factorielle(-4))  #-> ça fait nimp
 
-""" on peut prévenir l'utilisateur qu'il fait pas bien ce con en renvoyant une valeur spéciale """
+""" on peut prévenir l'utilisateur qu'il fait pas bien en renvoyant une valeur spéciale """
 
 def factorielle(n: int)  -> int :
     """calcule la factorielle de n
@@ -133,7 +131,7 @@ def factorielle(n: int)  -> int :
     else :
         return -1
 
-print(factorielle(-4))  #-> affiche -1 ce qui dit a l'uti qu'il a été débile
+print(factorielle(-4))  #-> affiche -1 ce qui dit a l'uti qu'il a commis une erreur 
 
 # rem : on a changé la précondition -> tous les entiers sont acceptés mtn
 # contre intuitif, mais il apparaît pcq on peut mtn traiter correctement tous les entier
@@ -183,7 +181,7 @@ def factorielle(n: int) -> int:
             resultat *= n
         return resultat
     else:
-        raise exceptionParamNegatif("\nUn paramètre négatif n'est pas accepté -> TU CONNAIS PAS TES MATH GROS CON \nNan mais une factorielle d'un nombre négatif on est ou là")
+        raise exceptionParamNegatif("\nUn paramètre négatif n'est pas accepté -> TU CONNAIS PAS TES MATH \nNan mais une factorielle d'un nombre négatif on est ou là")
 
 factorielle(-4)
 
@@ -211,7 +209,7 @@ def factorielle(n: int) -> int:
             resultat *= n
         return resultat
     else:
-        raise exceptionParamNegatif("\nUn paramètre négatif n'est pas accepté -> TU CONNAIS PAS TES MATH GROS CON \nNan mais une factorielle d'un nombre négatif on est ou là")
+        raise exceptionParamNegatif("\nUn paramètre négatif n'est pas accepté -> TU CONNAIS PAS TES MATH  \nNan mais une factorielle d'un nombre négatif on est ou là")
 
 def test_factorielle(x) :
     try :
@@ -224,5 +222,5 @@ test_factorielle(-1)
 test_factorielle(5)
 
 # MISE EN PRATIQUE
-# Jvais avoir besoin d'un nveau fichier -> Chiaaaaaannnt -> TP07_MiseEnPratique
+# Jvais avoir besoin d'un nveau fichier -> TP07_MiseEnPratique
 
