@@ -13,7 +13,7 @@ class Fraction:
     def __init__(self,num: int =0 , den: int=1 ) -> int:
         """Construit la fraction avec un numérateur et dénominateur
 
-        PRE : 'num' entier, 'den' est un entier non nul
+        PRE : 'num' entier, 'den' est un entier 
         POST : crée une fraction représentée sous forme réduiteles, attributs privés
         RAISES : ZeroDivisionError si 'den' est nul -> on arrête tout
         """
