@@ -1,4 +1,3 @@
-import sys
 import qrcode
 import fitz
 import tkinter as tk
@@ -23,6 +22,7 @@ def genererCodeQr(donnees, nomFichier, dossierSortie="codesQr"):
     os.makedirs(dossierSortie, exist_ok=True)
 
     img.save(cheminComplet)
+
     return cheminComplet
 
 
@@ -41,7 +41,7 @@ def creerCodesQrDePdf(pdfPath, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
             morceauxTexte.append(morceau)
 
         tailleTotale = 0
-        cheminsCodesQr = []
+
         i = 0
         for morceau in morceauxTexte:
             i += 1
@@ -49,14 +49,14 @@ def creerCodesQrDePdf(pdfPath, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
             cheminQr = genererCodeQr(morceau, nomFichierQr)
             tailleQr = os.path.getsize(cheminQr)
             tailleTotale += tailleQr
-            cheminsCodesQr.append(cheminQr)
+
 
         print("Le fichier d'informations a été généré avec succès dans informationsProcessus.txt.")
         print( f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier 'codesQr' crée dans le répértoire courant ")
-        return len(morceauxTexte), tailleTotale, cheminsCodesQr
+        return len(morceauxTexte), tailleTotale
     except Exception as e:
         print(f"Erreur lors du traitement du fichier PDF : {e}")
-        return 0, 0, []
+        return 0, 0
 
 
 def creerCodeQrDeTexte(texte, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
@@ -67,7 +67,6 @@ def creerCodeQrDeTexte(texte, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
             morceauxTexte.append(morceau)
 
         tailleTotale = 0
-        cheminsCodesQr = []
         i=0
         for morceau in morceauxTexte:
             i+=1
@@ -75,15 +74,15 @@ def creerCodeQrDeTexte(texte, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
             cheminQr = genererCodeQr(morceau, nomFichierQr)
             tailleQr = os.path.getsize(cheminQr)
             tailleTotale += tailleQr
-            cheminsCodesQr.append(cheminQr)
+
 
         print("Le fichier d'informations a été généré avec succès dans informationsProcessus.txt.")
         print( f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier 'codesQr' crée dans le répértoire courant ")
 
-        return len(morceauxTexte), tailleTotale, cheminsCodesQr
+        return len(morceauxTexte), tailleTotale
     except Exception as e:
         print(f"Erreur lors du traitement du fichier texte : {e}")
-        return 0, 0, []
+        return 0, 0
 
 
 
@@ -93,12 +92,12 @@ def traiterFichier(fichierEntree):
 
 
     if fichierEntree.lower().endswith(".pdf"):
-        nbCodesQr, tailleTotale, cheminsCodesQr = creerCodesQrDePdf(fichierEntree,nomBaseFichier=nomBaseFichier)
+        nbCodesQr, tailleTotale = creerCodesQrDePdf(fichierEntree,nomBaseFichier=nomBaseFichier)
 
     elif fichierEntree.lower().endswith((".txt", ".text")):
         with open(fichierEntree, "r", encoding="utf-8") as fichier_texte:
             texte = fichier_texte.read()
-        nbCodesQr, tailleTotale, cheminsCodesQr = creerCodeQrDeTexte(texte, nomBaseFichier=nomBaseFichier)
+        nbCodesQr, tailleTotale = creerCodeQrDeTexte(texte, nomBaseFichier=nomBaseFichier)
 
     else:
         print("Format de fichier non pris en charge. Le script accepte uniquement les fichiers PDF et texte.")
