@@ -1,12 +1,12 @@
 import qrcode
 import fitz
-import tkinter as tk
-from tkinter import filedialog
+import argparse
 import time
 import os
 
 
-def genererCodeQr(donnees, nomFichier, dossierSortie="codesQr"):
+def genererCodeQr(donnees, nomFichier, couleurRemplissage, couleurFond, dossierSortie="codesQr"):
+
     cheminComplet = os.path.join(dossierSortie, nomFichier)
     qr = qrcode.QRCode(
         version=1,
@@ -16,8 +16,7 @@ def genererCodeQr(donnees, nomFichier, dossierSortie="codesQr"):
     )
     qr.add_data(donnees)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-
+    img = qr.make_image(fill_color=couleurRemplissage, back_color=couleurFond)
 
     os.makedirs(dossierSortie, exist_ok=True)
 
@@ -28,6 +27,9 @@ def genererCodeQr(donnees, nomFichier, dossierSortie="codesQr"):
 
 def creerCodesQrDePdf(pdfPath, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
     try:
+        couleurFond = input("Choisissez la couleur de fond du code QR, vous avez le choix entre :\n-black \n-white \n-red \n-blue \n-green \n-yellow \n-purple \n-orange \n-pink\n")
+        couleurRemplissage = input("Choisissez la couleur du code QR, vous avez le choix entre :\n-black \n-white \n-red \n-blue \n-green \n-yellow \n-purple \n-orange \n-pink\n")
+        dossierSortie = input('Quel nom voulez vous donner au dossier de sortie des Codes Qr : ')
         doc = fitz.open(pdfPath)
         texteTotal = ""
         for pageNum in range(doc.page_count):
@@ -46,55 +48,58 @@ def creerCodesQrDePdf(pdfPath, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
         for morceau in morceauxTexte:
             i += 1
             nomFichierQr = f"{nomBaseFichier}{i} .png"
-            cheminQr = genererCodeQr(morceau, nomFichierQr)
+            cheminQr = genererCodeQr(morceau, nomFichierQr, couleurFond, couleurRemplissage, dossierSortie=dossierSortie)
             tailleQr = os.path.getsize(cheminQr)
             tailleTotale += tailleQr
 
-
         print("Le fichier d'informations a été généré avec succès dans informationsProcessus.txt.")
-        print( f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier 'codesQr' crée dans le répértoire courant ")
+        print(
+            f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier {dossierSortie} crée dans le répértoire courant ")
         return len(morceauxTexte), tailleTotale
     except Exception as e:
         print(f"Erreur lors du traitement du fichier PDF : {e}")
-        return 0, 0
+        return 0, 0, []
 
 
 def creerCodeQrDeTexte(texte, tailleMaxParQr=1000, nomBaseFichier="codeQr"):
     try:
+        couleurFond = input("Choisissez la couleur de fond du code QR, vous avez le choix entre :\n-black \n-white \n-red \n-blue \n-green \n-yellow \n-purple \n-orange \n-pink\n")
+        couleurRemplissage = input("Choisissez la couleur du code QR, vous avez le choix entre :\n-black \n-white \n-red \n-blue \n-green \n-yellow \n-purple \n-orange \n-pink\n")
+        dossierSortie = input('Quel nom voulez vous donner au dossier de sortie des Codes Qr : ')
         morceauxTexte = []
         for i in range(0, len(texte), tailleMaxParQr):
             morceau = texte[i:i + tailleMaxParQr]
             morceauxTexte.append(morceau)
 
         tailleTotale = 0
-        i=0
+        i = 0
         for morceau in morceauxTexte:
-            i+=1
-            nomFichierQr = f"{nomBaseFichier}{i }.png"
-            cheminQr = genererCodeQr(morceau, nomFichierQr)
+            i += 1
+            nomFichierQr = f"{nomBaseFichier}{i}.png"
+            cheminQr = genererCodeQr(morceau, nomFichierQr, couleurFond, couleurRemplissage, dossierSortie=dossierSortie)
             tailleQr = os.path.getsize(cheminQr)
             tailleTotale += tailleQr
 
+        print("Le fichier d'informations a été généré avec succès dans informationsProcessus.txt. disponible dans le répertoire courant")
 
-        print("Le fichier d'informations a été généré avec succès dans informationsProcessus.txt.")
-        print( f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier 'codesQr' crée dans le répértoire courant ")
-
+        print(
+            f"Les codes QR ont été générés avec succès. Accédez aux codes QR dans le dossier {dossierSortie} crée dans le répértoire courant ")
         return len(morceauxTexte), tailleTotale
     except Exception as e:
         print(f"Erreur lors du traitement du fichier texte : {e}")
-        return 0, 0
-
+        return 0, 0, []
 
 
 def traiterFichier(fichierEntree):
-    nomBaseFichier = os.path.splitext(os.path.basename(fichierEntree))[0]
+
     debut = time.time()
 
-
     if fichierEntree.lower().endswith(".pdf"):
-        nbCodesQr, tailleTotale = creerCodesQrDePdf(fichierEntree,nomBaseFichier=nomBaseFichier)
+        nomBaseFichier = input("Entrez le nom de base pour les fichiers de sortie des codes QR (sans extension) : ")
+        nbCodesQr, tailleTotale = creerCodesQrDePdf(fichierEntree, nomBaseFichier=nomBaseFichier)
 
     elif fichierEntree.lower().endswith((".txt", ".text")):
+        nomBaseFichier = input("Entrez le nom de base pour les fichiers de sortie des codes QR (sans extension) : ")
         with open(fichierEntree, "r", encoding="utf-8") as fichier_texte:
             texte = fichier_texte.read()
         nbCodesQr, tailleTotale = creerCodeQrDeTexte(texte, nomBaseFichier=nomBaseFichier)
@@ -102,7 +107,6 @@ def traiterFichier(fichierEntree):
     else:
         print("Format de fichier non pris en charge. Le script accepte uniquement les fichiers PDF et texte.")
         return
-
     fin = time.time()
     dureeExecution = fin - debut
 
@@ -117,36 +121,12 @@ def traiterFichier(fichierEntree):
         fichierInfos.write(informations)
 
 
-def choisirFichier():
-    fichierEntree = filedialog.askopenfilename(title="Choisir un fichier PDF ou Txt", filetypes=[("PDF Files", "*.pdf"), ("Text Files", "*.txt")])
-
-    if fichierEntree:
-        traiterFichier(fichierEntree)
-
-
-
-class App:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Générateur de Codes QR")
-
-        self.label = tk.Label(master, text="Choisir un fichier PDF ou texte:")
-        self.label.pack()
-
-        self.boutonChoisirFichier = tk.Button(master, text="Choisir un fichier", command=self.choisirFichier)
-        self.boutonChoisirFichier.pack()
-
-        self.boutonQuitter = tk.Button(master, text="Quitter", command=self.quitter)
-        self.boutonQuitter.pack()
-
-    def choisirFichier(self):
-        choisirFichier()
-
-    def quitter(self):
-        self.master.destroy()
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Générateur de Codes QR pour fichiers PDF et texte")
+    parser.add_argument("fichier", help="Chemin vers le fichier PDF ou texte à traiter", type=str)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = App(root)
-    root.mainloop()
+    args = parse_arguments()
+    traiterFichier(args.fichier)
