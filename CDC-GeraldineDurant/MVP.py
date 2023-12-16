@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def dashboard():
-    # Exemple de sites à surveiller
+    
     sites = ["http://example.com", "http://example.org"]
     status = {}
 
