@@ -1,5 +1,4 @@
 
-
 from math import gcd
 
 class Fraction:
@@ -10,20 +9,22 @@ class Fraction:
     Cette classe permet des manipulations et opérations sur les fractions
     """
 
-    def __init__(self,num: int =0 , den: int=1 ) -> int:
+    def __init__(self,  num: int = 0, den: int = 1) -> int:
         """Construit la fraction avec un numérateur et dénominateur
 
-        PRE : 'num' entier, 'den' est un entier 
-        POST : crée une fraction représentée sous forme réduiteles, attributs privés
+        PRE : 'num' entier, 'den' est un entier non nul
+        POST : crée une fraction représentée sous forme réduitees, attributs privés
         RAISES : ZeroDivisionError si 'den' est nul -> on arrête tout
         """
-        if den == 0 :
-            raise  ZeroDivisionError("\nLe dénominateur est zéro, t'as cassé tout l'univers ")
+        if den == 0:
+            raise ZeroDivisionError("\nLe dénominateur est zéro, t'as cassé tout l'univers ")
 
-        PGDC = gcd(abs(num),abs(den))
-        self.__num = num // PGDC # // division entière -> précaution pour ne pas obtenir de flottant , même si c'est le PGDC
+        if (num < 0 and den < 0) or (den < 0):
+            num, den = -num, -den
+
+        PGDC = gcd(abs(num), abs(den))
+        self.__num = num // PGDC  # // division entière -> précaution pour ne pas obtenir de flottant , même si c'est le PGDC
         self.__den = den // PGDC
-
 
     @property
     def numerateur(self):
@@ -66,9 +67,9 @@ class Fraction:
         POST : Renvoie la représentation textuelle sous forme de nombre mixte de la fraction réduite
                 si par hasard il n'y a pas de reste, tqt on gère
         """
-        partieEntier= self.__num // self.__den
+        partieEntier = self.__num // self.__den
         reste = self.__num % self.__den
-        if reste == 0 :
+        if reste == 0:
             return str(partieEntier)
 
         return f'{partieEntier} + {reste}/{self.__den}'
@@ -83,8 +84,7 @@ class Fraction:
          """
         nveauNum = self.__num * other.__den + self.__den * self.__num
         nveauDen = self.__den * other.__den
-        return Fraction(nveauNum,nveauDen)
-
+        return Fraction(nveauNum, nveauDen)
 
     def __sub__(self, other):
         """surcharge l'opérateur - pour les fractions
@@ -94,7 +94,6 @@ class Fraction:
         nveauNum = self.__num * other.__den - self.__den * self.__num
         nveauDen = self.__den * other.__den
         return Fraction(nveauNum, nveauDen)
-
 
     def __mul__(self, other):
         """surcharge l'opérateur *  pour les fractions
@@ -130,7 +129,6 @@ class Fraction:
         nveauDen = self.__den ** power
         return Fraction(nveauNum, nveauDen)
 
-
     def __eq__(self, other):
         """Surcharge de l'opérateur == pour les fractions
 
@@ -146,7 +144,7 @@ class Fraction:
         PRE : /
         POST : Renvoie la valeur décimale de la fraction
         """
-        return self.__num/self.__den
+        return self.__num / self.__den
 
     # TODO : [BONUS] You can overload other operators if you wish (ex : <, >, ...)
 
@@ -159,14 +157,13 @@ class Fraction:
         """
         return self.__num == 0
 
-
     def is_integer(self):
         """Vérifie si la fraction est un entier entier
 
 
         POST : Renvoie True si la fraction est un entier, False sinon
         """
-        return self.__num/self.__den == int(self.__num/self.__den)
+        return self.__num / self.__den == int(self.__num / self.__den)
 
     def is_proper(self):
         """Vérifie si la valeur absolue de la fraction est < 1
@@ -192,7 +189,5 @@ class Fraction:
         """
         diff = abs(self.__num * other.__den - other.__num * self.__den)
         return diff == 1
-
-
 
 # FINIIIIIIIIIIIIIIIIII
