@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tableau de Bord</title>
+
+</head>
+<body>
+    <h1>État des Sites Web</h1>
+    <ul>
+    {% for site, statut in status.items() %}
+        <li>{{ site }} - {{ statut }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
